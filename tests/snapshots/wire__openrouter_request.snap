@@ -1,0 +1,97 @@
+---
+source: tests/wire.rs
+expression: "pretty(&openai::chat_body(\"model-x\", Some(\"high\"), &conversation()))"
+---
+{
+  "messages": [
+    {
+      "content": "SYSTEM PROMPT",
+      "role": "system"
+    },
+    {
+      "content": "Request: x",
+      "role": "user"
+    },
+    {
+      "content": null,
+      "role": "assistant",
+      "tool_calls": [
+        {
+          "function": {
+            "arguments": "{\"commands\":[{\"program\":\"sort\",\"args\":[\"-rn\"]}],\"explanation\":\"e\"}",
+            "name": "propose_pipeline"
+          },
+          "id": "call_1",
+          "type": "function"
+        }
+      ]
+    },
+    {
+      "content": "{\"status\":\"ok\",\"run\":\"full\",\"exit_code\":0}",
+      "role": "tool",
+      "tool_call_id": "call_1"
+    },
+    {
+      "content": "Follow-up: y",
+      "role": "user"
+    }
+  ],
+  "model": "model-x",
+  "provider": {
+    "require_parameters": true
+  },
+  "reasoning": {
+    "effort": "high"
+  },
+  "stream": false,
+  "tool_choice": "auto",
+  "tools": [
+    {
+      "function": {
+        "description": "Propose a linear pipeline that turns stdin into the requested output.",
+        "name": "propose_pipeline",
+        "parameters": {
+          "additionalProperties": false,
+          "properties": {
+            "commands": {
+              "description": "Pipeline stages in order. Empty if the request can't be done with the allowed tools.",
+              "items": {
+                "additionalProperties": false,
+                "properties": {
+                  "args": {
+                    "description": "The arguments after the program name (argv[1:]), without shell quoting. Never starts with the program name.",
+                    "items": {
+                      "type": "string"
+                    },
+                    "type": "array"
+                  },
+                  "program": {
+                    "description": "Bare name of an allowed tool.",
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "program",
+                  "args"
+                ],
+                "type": "object"
+              },
+              "type": "array"
+            },
+            "explanation": {
+              "description": "One sentence: what the pipeline does, or why it can't be done.",
+              "type": "string"
+            }
+          },
+          "required": [
+            "commands",
+            "explanation"
+          ],
+          "type": "object"
+        },
+        "strict": true
+      },
+      "type": "function"
+    }
+  ]
+}

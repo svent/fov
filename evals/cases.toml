@@ -1,0 +1,108 @@
+# Eval cases for `fov-eval` (PRD §12). Queries name the output format, so comparisons
+# are unambiguous. Expected files come from reference pipelines and are reviewed by hand.
+
+[[case]]
+name = "gh-top-types"
+input = "testdata/github-events.ndjson"
+turns = ["the 3 most frequent event types with their counts, most frequent first, as '<count> <type>'"]
+expected = "evals/expected/gh-top-types.txt"
+compare = "fields"
+
+[[case]]
+name = "gh-push-commits"
+input = "testdata/github-events.json"
+turns = ["for PushEvents, sum payload.size per repository name; the top 5 repositories as '<sum> <repo>', highest first"]
+expected = "evals/expected/gh-push-commits.txt"
+compare = "fields"
+
+[[case]]
+name = "gh-pr-actions"
+input = "testdata/github-events.json"
+turns = ["count PullRequestEvents by payload.action, as '<count> <action>'"]
+expected = "evals/expected/gh-pr-actions.txt"
+compare = "unordered"
+
+[[case]]
+name = "sales-revenue"
+input = "testdata/sales.csv"
+turns = ["completed orders only: total revenue (quantity × unit_price) per region, highest first, as '<region> <revenue>' with 2 decimals"]
+expected = "evals/expected/sales-revenue.txt"
+compare = "fields"
+
+[[case]]
+name = "sales-refine"
+input = "testdata/sales.csv"
+turns = [
+    "completed orders only: total revenue (quantity × unit_price) per region, highest first, as '<region> <revenue>' with 2 decimals",
+    "now only the Electronics category, top 2",
+]
+expected = "evals/expected/sales-refine.txt"
+compare = "fields"
+
+[[case]]
+name = "log-top-ips"
+input = "testdata/access.log"
+turns = ["the top 5 client IPs by number of requests, as '<count> <ip>', most requests first"]
+expected = "evals/expected/log-top-ips.txt"
+compare = "fields"
+
+[[case]]
+name = "log-5xx-paths"
+input = "testdata/access.log"
+turns = ["count the responses with a 5xx status per request path; the top 3 as '<count> <path>', most first"]
+expected = "evals/expected/log-5xx-paths.txt"
+compare = "fields"
+
+# Harder cases: each targets one failure mode the cases above don't cover.
+
+# Nested array: count commits, not pushes or push actors.
+[[case]]
+name = "gh-commit-authors"
+input = "testdata/github-events.json"
+turns = ["across all PushEvents, count the commits per commit author name; the top 3 as '<count> <name>', most first"]
+expected = "evals/expected/gh-commit-authors.txt"
+compare = "fields"
+
+# Distinct count: 165 PushEvents but 128 distinct actors.
+[[case]]
+name = "gh-distinct-actors"
+input = "testdata/github-events.ndjson"
+turns = ["the number of distinct actors (actor.login) per event type; the top 3 as '<count> <type>', most first"]
+expected = "evals/expected/gh-distinct-actors.txt"
+compare = "fields"
+
+# Argmax per group, with product names that contain spaces.
+[[case]]
+name = "sales-top-units"
+input = "testdata/sales.csv"
+turns = ["completed orders only: for each region, the product with the most units sold (sum of quantity), as '<region> <product> <units>', regions in alphabetical order"]
+expected = "evals/expected/sales-top-units.txt"
+compare = "fields"
+
+# Three turns; the last one swaps the metric and the sort order.
+[[case]]
+name = "sales-3-turns"
+input = "testdata/sales.csv"
+turns = [
+    "completed orders only: the number of orders per region, as '<region> <count>', most orders first",
+    "now only the Furniture category",
+    "show the total revenue (quantity × unit_price) with 2 decimals instead of the count, sorted by region name",
+]
+expected = "evals/expected/sales-3-turns.txt"
+compare = "fields"
+
+# A quoted field with spaces; whitespace splitting yields only `"Mozilla/5.0`.
+[[case]]
+name = "log-user-agents"
+input = "testdata/access.log"
+turns = ["the 3 most common user agents with their request counts, as '<count> <user agent>', most first"]
+expected = "evals/expected/log-user-agents.txt"
+compare = "fields"
+
+# Timestamp parsing and a ratio whose denominator is all responses in the hour.
+[[case]]
+name = "log-5xx-by-hour"
+input = "testdata/access.log"
+turns = ["for each hour of the day, the percentage of responses with a 5xx status; the 3 hours with the highest percentage as '<HH> <percent>' with 2 decimals, highest first"]
+expected = "evals/expected/log-5xx-by-hour.txt"
+compare = "fields"

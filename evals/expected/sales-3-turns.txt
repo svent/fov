@@ -1,0 +1,5 @@
+Central 46683.00
+East 51543.00
+North 97587.00
+South 45981.00
+West 66402.00

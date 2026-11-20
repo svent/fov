@@ -1,0 +1,116 @@
+---
+source: tests/wire.rs
+expression: pretty(&body)
+---
+{
+  "messages": [
+    {
+      "content": [
+        {
+          "text": "Request: x"
+        }
+      ],
+      "role": "user"
+    },
+    {
+      "content": [
+        {
+          "toolUse": {
+            "input": {
+              "commands": [
+                {
+                  "args": [
+                    "-rn"
+                  ],
+                  "program": "sort"
+                }
+              ],
+              "explanation": "e"
+            },
+            "name": "propose_pipeline",
+            "toolUseId": "call_1"
+          }
+        }
+      ],
+      "role": "assistant"
+    },
+    {
+      "content": [
+        {
+          "toolResult": {
+            "content": [
+              {
+                "text": "{\"status\":\"ok\",\"run\":\"full\",\"exit_code\":0}"
+              }
+            ],
+            "toolUseId": "call_1"
+          }
+        },
+        {
+          "text": "Follow-up: y"
+        }
+      ],
+      "role": "user"
+    }
+  ],
+  "system": [
+    {
+      "text": "SYSTEM PROMPT"
+    }
+  ],
+  "toolConfig": {
+    "toolChoice": {
+      "auto": {}
+    },
+    "tools": [
+      {
+        "toolSpec": {
+          "description": "Propose a linear pipeline that turns stdin into the requested output.",
+          "inputSchema": {
+            "json": {
+              "additionalProperties": false,
+              "properties": {
+                "commands": {
+                  "description": "Pipeline stages in order. Empty if the request can't be done with the allowed tools.",
+                  "items": {
+                    "additionalProperties": false,
+                    "properties": {
+                      "args": {
+                        "description": "The arguments after the program name (argv[1:]), without shell quoting. Never starts with the program name.",
+                        "items": {
+                          "type": "string"
+                        },
+                        "type": "array"
+                      },
+                      "program": {
+                        "description": "Bare name of an allowed tool.",
+                        "type": "string"
+                      }
+                    },
+                    "required": [
+                      "program",
+                      "args"
+                    ],
+                    "type": "object"
+                  },
+                  "type": "array"
+                },
+                "explanation": {
+                  "description": "One sentence: what the pipeline does, or why it can't be done.",
+                  "type": "string"
+                }
+              },
+              "required": [
+                "commands",
+                "explanation"
+              ],
+              "type": "object"
+            }
+          },
+          "name": "propose_pipeline",
+          "strict": true
+        }
+      }
+    ]
+  }
+}

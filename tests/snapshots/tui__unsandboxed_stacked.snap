@@ -1,0 +1,44 @@
+---
+source: tests/tui.rs
+expression: "render(& a, false)"
+---
+┌ Input · sales.csv · 133 KB · 2,001 lines ────────────────┐
+│order_id,date,region,product,category,status,quantity,unit│
+│ORD-00001,2025-01-01,North,Standing Desk,Furniture,complet│
+│ORD-00002,2025-01-01,North,Keyboard,Accessories,completed,│
+│ORD-00003,2025-01-01,South,USB-C Cable,Accessories,complet│
+│ORD-00004,2025-01-01,South,Monitor,Electronics,pending,2,2│
+│ORD-00005,2025-01-01,South,Laptop,Electronics,completed,1,│
+│ORD-00006,2025-01-01,North,USB-C Cable,Accessories,refunde│
+│ORD-00007,2025-01-01,East,USB-C Cable,Accessories,complete│
+│ORD-00008,2025-01-01,South,USB-C Cable,Accessories,complet│
+│ORD-00009,2025-01-01,East,Headphones,Electronics,pending,4│
+│ORD-00010,2025-01-01,West,Standing Desk,Furniture,complete│
+│ORD-00011,2025-01-02,North,Standing Desk,Furniture,refunde│
+│ORD-00012,2025-01-02,South,Laptop,Electronics,completed,1,│
+│ORD-00013,2025-01-02,West,Standing Desk,Furniture,complete│
+│ORD-00014,2025-01-02,North,USB-C Cable,Accessories,complet│
+└──────────────────────────────────────────────────────────┘
+┌ Output ──────────────────────────────────────────────────┐
+│no preview yet                                            │
+│                                                          │
+│                                                          │
+│                                                          │
+│                                                          │
+│                                                          │
+│                                                          │
+│                                                          │
+│                                                          │
+│                                                          │
+│                                                          │
+│                                                          │
+│                                                          │
+│                                                          │
+│                                                          │
+└──────────────────────────────────────────────────────────┘
+┌ Command ─────────────────────────────────────────────────┐
+│Describe the output you want and press Enter.             │
+└──────────────────────────────────────────────────────────┘
+>
+ openrouter · test-model ·  UNSANDBOXED
+ Enter send · Tab focus · Ctrl-C quit
