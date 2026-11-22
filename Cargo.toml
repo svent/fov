@@ -7,6 +7,7 @@ description = "Turn plain-language requests into reusable shell pipelines, previ
 authors = ["Sven Taute"]
 license = "MIT"
 readme = "README.md"
+repository = "https://github.com/svent/fov"
 keywords = ["cli", "llm", "shell", "pipeline", "awk"]
 categories = ["command-line-utilities", "text-processing"]
 include = ["/src/**/*.rs", "/Cargo.toml", "/Cargo.lock", "/README.md", "/LICENSE"]
